@@ -1,0 +1,50 @@
+<div class="aspire_modal_content">
+	<div class="aspire_modal_header">
+		<h2 class="avc_modal_title">AGE VERIFICATION</h2>
+	</div>
+	<div class="aspire_modal_body">
+		<p class="aspire_modal_content_text">
+			<span id='website' style='display:none'>https://wholesale.aspirevapeco.com</span><span id='required_key' style='display:none'>wE36O26sOMY3Xqcg</span>Intended for sale to adults 21 years or older. If you are not of legal age in the state where you live, please do not enter this site
+		</p>
+		<div class="circle-loader avc_disabled">
+			<div class="checkmark draw avc_disabled">
+			</div>
+		</div>
+		<div class="aspire_modal_buttons">
+			<p class="aspire_modal_content_text">
+		        <strong>PLEASE ENTER YOUR DATE OF BIRTH</strong>
+		    </p>
+			<input id="mmInput" type="tel" class="aspire_dateof" data-variable="month" placeholder="mm" tabindex="1" maxlength="2"  onkeypress="return preventBackspace(event)" onkeydown= "return preventBackspace(event)" onkeyup="return jumpNext(event,this,value)" pattern="[0-9]*" novalidate autofocus>
+			<input id="ddInput" type="tel" class="aspire_dateof" data-variable="day" placeholder="dd" tabindex="2" maxlength="2" onkeypress="return preventBackspace(event)" onkeydown= "return preventBackspace(event)" onkeyup="return jumpNext(event,this,value)" pattern="[0-9]*" novalidate autofocus>
+			<input id="yyyyInput" type="tel" class="aspire_dateof" data-variable="year" placeholder="yyyy" tabindex="3" maxlength="4" onkeypress="return preventBackspace(event)" onkeydown= "return preventBackspace(event)"  onkeyup="return jumpNext(event,this,value)" pattern="[0-9]*" novalidate autofocus> 
+			<!--input type="text" class="aspire_dateof" data-variable="month" placeholder="mm" tabindex="101" onkeypress="return aspire_verifyDOF(event, 'mmdd')">
+			<input type="text" class="aspire_dateof" data-variable="day" placeholder="dd" tabindex="102" onkeypress="return aspire_verifyDOF(event, 'mmdd')">
+			<input type="text" class="aspire_dateof" data-variable="year" placeholder="yyyy" tabindex="103" onkeypress="return aspire_verifyDOF(event, 'yyyy')"-->
+			<br>
+			<div style="display:none">
+				<textarea class="aspire_tc" readonly>-</textarea>
+				<label class="aspire_checkbox_container">
+				  <input type="checkbox">
+				  <span class="aspire_checkmark"></span>I have read and agree
+				</label>
+			</div>
+			<!--a class="aspire_modal_button aspire_modal_info" href="#aspire_open_modal">
+				<button class="aspire_modal_button aspire_modal_info" tabindex="106">Info</button>
+			</a-->
+			<button id="cancelButton" class="aspire_modal_button aspire_modal_cancel" tabindex="5" onClick="aspire_processData(false)">
+				Cancel
+			</button>
+			<button id="enterButton" class="aspire_modal_button aspire_modal_confirm" tabindex="4" onClick="aspire_processData(true)" onkeypress="return preventBackspace(event)" onkeydown= "return preventBackspace()" onkeyup="return jumpNext(event,this,value)">
+				Enter
+			</button>
+			<div id="aspire_open_modal" class="aspire_modal_dialog">
+				<div>
+					<a href="#aspire_close_modal" title="Close" class="aspire_close_modal">X</a>
+					<textarea class="aspire_info_description" readonly>Description</textarea>
+					<div><a href="https://aspirevapeco.com" target="_blank">Redirect URL</a></div>
+					<div><a href="https://aspirevapeco.com" target="_blank">Reject URL</a></div>
+				</div>
+			</div>	
+		</div>
+	</div>
+</div>

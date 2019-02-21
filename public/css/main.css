@@ -1,0 +1,61 @@
+.my_website_table > thead > tr > th {
+    width:10%;
+}
+
+
+[v-cloak] {
+  display: none;
+}
+
+#es_logo {
+  background-color: #43A047;
+  transform: translate(5em, 0);
+}
+
+
+.link-href{
+  color:white;
+}
+
+.tab-link-href{  
+  cursor:pointer; 
+  color:#43A047; 
+  font-weight:bold;
+  margin:0;
+  padding:20px;  
+  
+}
+
+
+
+.link-href:hover, .tab-link-href:hover{
+  text-decoration:none;
+}
+
+.link-btn{
+  color: black;
+  font-weight: bold;
+ /* width:100%;*/
+}
+.link-btn > a:hover{  
+  text-decoration:none;
+  color: white;
+ /* color: white;
+  text-shadow: 2px 2px 5px black;*/
+}
+
+.link-btn-active{
+  color:#435b71;
+  border-bottom:2px solid #435b71;
+}
+
+
+.extratoolbar-color{
+  color:#cfd8dc;
+}
+
+#app {
+  font-family: 'Helvetica', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
