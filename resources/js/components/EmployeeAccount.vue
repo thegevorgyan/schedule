@@ -353,22 +353,6 @@ console.log(this.rules.same(false));
           elm.style.transform = "translate(" + x + "em,0)";
       }, 
 
-
-      
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     },
     computed: {
      confirmPassword () {
