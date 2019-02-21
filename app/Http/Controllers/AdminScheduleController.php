@@ -29,7 +29,7 @@ class AdminScheduleController extends Controller
     {        
         if($request->input('name') == 'users'){       
             $users = DB::table('users')
-            ->select('first_name','email')
+            ->select('first_name', 'last_name', 'email')
             ->get();
             return json_encode($users);  
         } else {

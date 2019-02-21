@@ -94,36 +94,47 @@
 
 
 
-
-
-
-       
-
-
-        <v-spacer></v-spacer>
- <v-flex xs8 sm6 md4 lg3 lx2>
+        <v-flex xs8 sm6 md4 lg3 lx2>
           <v-autocomplete
             :items="selectEmail"
+           
             v-model="employee"
             label="Choose Employee"
             @change="getSchedule(employee)"
           ></v-autocomplete>
+          <v-card class="green darken-1">
+            <span class="white--text">{{ employeeFullName }}</span>
+          </v-card>
         </v-flex>
+
+        <v-btn
+          v-if="employee!=null" 
+          color="success" 
+          fab 
+          small 
+          title="Export to Excel" 
+          @click="onExport"
+          >
+            <v-icon>import_export</v-icon>
+        </v-btn>
+ 
+        <v-spacer></v-spacer>
+
  <v-spacer></v-spacer>
          <v-flex xs8 sm6 md4 lg3 lx2>
-          <v-text-field        
+          <v-text-field
             v-model="search"
             append-icon="search"
             label="Search"           
             hide-details
             @click="es_alert=false"
+            @keyup="searchTask"
           ></v-text-field>
          </v-flex>
       </v-card-title>
 
 
-          <v-data-table
-    
+          <v-data-table    
             :headers="headers"
             :items="obj_tasks"
             item-key="id"
@@ -170,9 +181,12 @@
     data: () => ({
 
 
-      employee: null,     
-      selectEmail: [],
+      employee: null,   
+      employeeFullName: '',  
+      selectEmail: [],    
       obj_tasks: [],
+      employees: [],
+      
 
       rules: {
         required: value => !!value || 'Required.',
@@ -189,8 +203,8 @@
       search: '',
   
       es_alert: false,
-      es_alert_type: 'success',  
-      es_alert_text: 'Data was successfully changed.',   
+      es_alert_type: 'success',
+      es_alert_text: 'Data was successfully changed.',
       headers: [
         { text: 'Task Name', value: 'task_name' },
         { text: 'Hour(s)', value: 'hours' },
@@ -212,25 +226,20 @@
     props: ['url'],
     mounted: function() {
       this.url = this._props.url;
-    //  this.obj_users = JSON.parse(this.users);
-   //   console.log(this.obj_users);
-   //   console.log(this.rules.emailMatch);
     },   
     created: function(){
       this.getUsers();
     },
     methods: {
 
+      searchTask: function(){
 
-
-
-
-
+      },
 
       esAlert: function(value, type, text){        
         this.es_alert = value;
         this.es_alert_type = type;
-        this.es_alert_text = text;        
+        this.es_alert_text = text;
       },
       getUsers: function(){       
         axios({ 
@@ -240,10 +249,11 @@
             name: 'users'
           }
         })
-        .then(result => {
+        .then(result => {          
           for(let i=0; i<result.data.length; i++){
-            this.selectEmail.push({text: result.data[i].email});
+            this.selectEmail.push({ text: result.data[i].email, fullname: result.data[i].first_name });     
           }
+          this.employees = result.data;
         }).catch(error => {
             console.error(error);
         });
@@ -258,7 +268,14 @@
         })
         .then(result => {
           this.obj_tasks = result.data;
-          console.log(result.data);
+         console.log(this.obj_tasks);
+         this.datas.sheet = this.obj_tasks;
+       //  this.datas.sheet = []
+          for(let i=0; i<this.employees.length; i++){
+            if(this.employees[i].email === val){
+              this.employeeFullName = this.employees[i].first_name + ' ' + this.employees[i].last_name;
+            }
+          }          
         }).catch(error => {
             console.error(error);
         });
@@ -387,7 +404,7 @@
         var wb = XLSX.utils.book_new() // make Workbook of Excel
 
         XLSX.utils.book_append_sheet(wb, sheetWS, 'sheet') // sheetAName is name of Worksheet
-        XLSX.writeFile(wb, 'vbe_received.xlsx') // name of the file is 'book.xlsx'
+        XLSX.writeFile(wb, this.employee + '.xlsx') // name of the file is 'book.xlsx'
       },
       sidebar: function(val) {
         switch(val){

@@ -11,7 +11,7 @@
 
     <!-- Scripts -->
     {{-- <script src="{{ asset('js/vendor/MooTools-Core-1.6.0.js') }}" defer></script> --}}
-    @if (Request::is('admin/stat') || Request::is('admin/stor') || Request::is('admin/cache'))
+    @if (Request::is('admin/*'))
         <script src="{{ asset('js/vendor/xlsx.min.js') }}" defer></script>
     @endif      
     <script src="{{ asset('js/app.js') }}" defer></script>
