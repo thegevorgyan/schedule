@@ -55,7 +55,6 @@
             <v-icon v-if="exp_panel[2]==true" slot="header" color="#435b71">visibility</v-icon>
             <v-icon v-if="exp_panel[2]==false" slot="header">visibility_off</v-icon>
             <div v-if="!mini" slot="header">View</div>
-            
           </v-expansion-panel-content>
       </v-expansion-panel>
     </v-navigation-drawer>
@@ -100,18 +99,20 @@
 
 
 
-
+   <v-form ref="form">
           <v-text-field
             v-if="info.change_pwd==true"
             v-model="new_pwd"
             :append-icon="showPwd2 ? 'visibility_off' : 'visibility'"
-            :rules="[rules.required]"
+           :rules="confirmPassword"
             :type="showPwd2 ? 'text' : 'password'"
             name="input-10-1"
             label="New password"           
             counter
             @click:append="showPwd2 = !showPwd2;"
           ></v-text-field> 
+           </v-form>
+       
           <v-text-field
             v-if="info.change_pwd==true"
             v-model="confirm_new_pwd"
@@ -123,6 +124,7 @@
             counter
             @click:append="showPwd3 = !showPwd3;"
           ></v-text-field> 
+                   
 
 
         <v-btn
@@ -228,6 +230,10 @@
     //  this.debouncedGetAnswer = _.debounce(this.getAnswer, 500);
     },
     watch: {
+
+       new_pwd:'validateField',
+       confirm_new_pwd:'validateField'
+
     /*  new_pwd: function (newQuestion, oldQuestion) {
         this.new_pwd_value = newQuestion;
       //  this.debouncedGetAnswer()
@@ -244,6 +250,9 @@ console.log(this.rules.same(false));
       }*/
     },
     methods: {
+      validateField () {
+       this.$refs.form.validate()
+      },
       esAlert: function(value, type, text){        
         this.es_alert = value;
         this.es_alert_type = type;
@@ -293,7 +302,7 @@ console.log(this.rules.same(false));
         });
       },
 
-
+      
 
 
 
@@ -345,6 +354,7 @@ console.log(this.rules.same(false));
       }, 
 
 
+      
 
 
 
@@ -359,8 +369,23 @@ console.log(this.rules.same(false));
 
 
 
+    },
+    computed: {
+     confirmPassword () {
+      const confirmPassword = []
 
-    }
+       if (this.confirm_new_pwd) {
+         const rule =
+           v => (!!v && v) === this.confirm_new_pwd ||
+             'Values do not match'
+
+         confirmPassword.push(rule)
+       }
+
+      return confirmPassword
+     }
+   }
+
   }
 </script>
 
