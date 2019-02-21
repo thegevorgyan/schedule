@@ -93,10 +93,10 @@
             counter
             @click:append="showPwd1 = !showPwd1;"
           ></v-text-field> 
-          <!-- <v-checkbox
+           <v-checkbox
             v-model="info.change_pwd"
             label="I want to change my password:"
-          ></v-checkbox> -->
+          ></v-checkbox> 
 
 
 
