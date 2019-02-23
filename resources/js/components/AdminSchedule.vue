@@ -46,99 +46,65 @@
               view_stream
             </v-icon>
             <div v-if="!mini" slot="header">Panel</div>
-            <v-list dense>
-                
+            <v-list dense>                
             </v-list>
           </v-expansion-panel-content>
           <v-expansion-panel-content class="green lighten-3">
             <v-icon v-if="exp_panel[2]==true" slot="header" color="#435b71">visibility</v-icon>
             <v-icon v-if="exp_panel[2]==false" slot="header">visibility_off</v-icon>
-            <div v-if="!mini" slot="header">View</div>
-            
+            <div v-if="!mini" slot="header">View</div>            
           </v-expansion-panel-content> 
       </v-expansion-panel>
-    </v-navigation-drawer>
-    
- <v-toolbar-side-icon style="position:fixed; top:-4px; left:20px;" @click.stop="sidebar('open_drawer')"></v-toolbar-side-icon>
-
-
-
-
- 
-
-
-
-
-
-
-
-
-  <v-layout justify-center row wrap mt-4>
-    <v-flex xs10>
-      <v-card>
-        <v-card-title>
-
-       
-
-
-
-<!-- 
-        <v-btn  color="error" fab medium title="Delete" @click="deleteUsers">
-          <v-icon>delete_forever</v-icon>
-        </v-btn>
-        <v-btn color="warning" fab medium title="Edit" @click="editUsers">
-          <v-icon>edit</v-icon>
-        </v-btn> -->
-
-
-
-
-
-        <v-flex xs8 sm6 md4 lg3 lx2>
-          <v-autocomplete
-            :items="selectEmail"
-           
-            v-model="employee"
-            label="Choose Employee"
-            @change="getSchedule(employee)"
-          ></v-autocomplete>
-          <v-card class="green darken-1">
-            <span class="white--text">{{ employeeFullName }}</span>
-          </v-card>
-        </v-flex>
-
-        <v-btn
-          v-if="employee!=null" 
-          color="success" 
-          fab 
-          small 
-          title="Export to Excel" 
-          @click="onExport"
-          >
-            <v-icon>import_export</v-icon>
-        </v-btn>
- 
-        <v-spacer></v-spacer>
-
- <v-spacer></v-spacer>
-         <v-flex xs8 sm6 md4 lg3 lx2>
-          <v-text-field
-            v-model="search"
-            append-icon="search"
-            label="Search"           
-            hide-details
-            @click="es_alert=false"
-            @keyup="searchTask"
-          ></v-text-field>
-         </v-flex>
-      </v-card-title>
-
-
+    </v-navigation-drawer>    
+    <v-toolbar-side-icon style="position:fixed; top:-4px; left:20px;" @click.stop="sidebar('open_drawer')"></v-toolbar-side-icon>
+    <v-layout justify-center row wrap mt-4>
+      <v-flex xs10>
+        <v-card>
+          <v-card-title>
+            <v-flex xs10 sm5 md4 lg4 xl3>
+              <v-autocomplete
+                :items="selectEmail"           
+                v-model="employee"
+                label="Choose Employee"
+                @change="getSchedule(employee)"
+              ></v-autocomplete>
+              <v-card class="green darken-1">
+                <span class="white--text">{{ employeeFullName }}</span>
+              </v-card>
+            </v-flex>
+            <v-flex xs2 sm2 md4 lg4 xl6>              
+              <v-btn
+                v-if="employee!=null"
+                color="success" 
+                fab
+                small
+                title="Export to Excel"
+                @click="onExport"
+                >
+                  <v-icon>import_export</v-icon>
+              </v-btn> 
+            </v-flex>
+            <v-spacer></v-spacer>
+            <v-flex xs10 sm5 md4 lg4 xl3  v-if="employee!=null">
+              <v-select
+                :items="headers"           
+                v-model="search_catergory"
+                label="Search by category" 
+                @change="searchTask(employee)"          
+              ></v-select>    
+              <v-text-field           
+                v-model="search"
+                append-icon="search"
+                label="Search"           
+                hide-details
+                @keyup="searchTask(employee)"
+              ></v-text-field>
+            </v-flex>          
+          </v-card-title>
           <v-data-table    
             :headers="headers"
             :items="obj_tasks"
             item-key="id"
-
             class="elevation-5"
             :search="search"           
           >           
@@ -148,46 +114,28 @@
               <td>{{ props.item.minutes }}</td>
               <td>{{ props.item.day }}</td>
             </template>
-              <v-alert 
-                slot="no-results" 
-                :value="true"
-                color="error" 
-                icon="warning"
-              >
-                Your search for "{{ search }}" found no results.
-              </v-alert>
           </v-data-table>
-
-      <v-alert
-        :value="es_alert"
-        :type="es_alert_type"       
-        transition="scale-transition"
-        @click="es_alert=false"
-      >
-        {{ es_alert_text }}
-      </v-alert>
- </v-card>  
+          <v-alert
+            :value="es_alert"
+            :type="es_alert_type"       
+            transition="scale-transition"
+          >
+            {{ es_alert_text }}
+          </v-alert>
+        </v-card>  
       </v-flex>
- </v-layout>
-
-
-
-        
+    </v-layout>   
   </v-app>   
 </template>
 
 <script>
   export default {   
     data: () => ({
-
-
       employee: null,   
       employeeFullName: '',  
       selectEmail: [],    
       obj_tasks: [],
       employees: [],
-      
-
       rules: {
         required: value => !!value || 'Required.',
         min: value => value.length >= 3 || 'Min 3 characters',
@@ -200,8 +148,7 @@
       datas: {
         'sheet':[]
       },
-      search: '',
-  
+      search: '',  
       es_alert: false,
       es_alert_type: 'success',
       es_alert_text: 'Data was successfully changed.',
@@ -211,12 +158,12 @@
         { text: 'Minute(s)', value: 'minutes' },
         { text: 'Date', value: 'day' },
       ],
+      search_catergory: '',
       new_first_name: '',
       new_last_name: '',
       new_email: '',
       new_pwd: '',
-      dialog: false,
-     
+      dialog: false,     
       drawer: false,
       clipped: false,
       mini: true,
@@ -226,16 +173,12 @@
     props: ['url'],
     mounted: function() {
       this.url = this._props.url;
+      this.search_catergory = this.headers[0].value;
     },   
     created: function(){
       this.getUsers();
     },
     methods: {
-
-      searchTask: function(){
-
-      },
-
       esAlert: function(value, type, text){        
         this.es_alert = value;
         this.es_alert_type = type;
@@ -263,14 +206,13 @@
           method: "POST",
           url: (this.url + "/admin/schedule/getsch"),
           data: {
-            email: val
+            email: val,
+            key: false,
           }
         })
         .then(result => {
           this.obj_tasks = result.data;
-         console.log(this.obj_tasks);
-         this.datas.sheet = this.obj_tasks;
-       //  this.datas.sheet = []
+          this.datas.sheet = this.obj_tasks;
           for(let i=0; i<this.employees.length; i++){
             if(this.employees[i].email === val){
               this.employeeFullName = this.employees[i].first_name + ' ' + this.employees[i].last_name;
@@ -280,129 +222,33 @@
             console.error(error);
         });
       },
-      saveUsers: function(){
-        let new_users_field = document.getElementsByClassName('new_users_field'),
-            new_user = [],
-            new_user_arr = [];
-
-        new_user.push({
-          'new_first_name': this.new_first_name,
-          'new_last_name': this.new_last_name,
-          'new_email': this.new_email,
-          'new_pwd': this.new_pwd
-        });
-
-        for(let i=0; i<new_users_field.length; i++){
-          if(new_users_field[i].classList.contains('error--text')){
-            new_user_arr.push(i);          
-          }
-        }
-
-        if(new_user_arr.length == 0){
-          axios({ 
-            method: "POST",
-            url: (this.url + "/admin/users/store"),
-            data: {
-              user: new_user,
-              action: 'add'
-            }
-          })
-          .then(result => {
-            this.getUsers();
-            this.dialog = false;
-          }).catch(error => {
-            this.esAlert('false', 'error', 'Please fill in all required fields.');
-            console.error(error);
-          });
-        } else {
-          this.esAlert('false', 'error', 'Please fill in all required fields correctly.');
-        }
-      },
-      editUsers: function(){
-       // this.esAlert();
-        let checkboxes = document.getElementsByClassName('checkboxes'),
-            arrCheckboxes = [];
-       
-        for(let i = 0; i < checkboxes.length; i++) {
-          if(checkboxes[i].classList.contains("v-input--is-label-active")) {
-                arrCheckboxes.push({
-                  'id': checkboxes[i].getAttribute('data'), 
-                  'user_first_name': document.getElementsByClassName('user_first_name')[i].getAttribute('data'),
-                  'user_last_name': document.getElementsByClassName('user_last_name')[i].getAttribute('data'),
-                  'user_email': document.getElementsByClassName('user_email')[i].getAttribute('data'),
-                  'user_password': document.getElementsByClassName('user_password')[i].getAttribute('data')
-                });
-          }         
-        }
-
-        axios({ 
+      searchTask: function(val){
+        let search = false;
+        this.search.trim() != '' ? search = this.search : search = false;
+        axios({
           method: "POST",
-          url: (this.url + "/admin/users/update"),
+          url: (this.url + "/admin/schedule/getsch"),
           data: {
-            id: arrCheckboxes,
-            action: 'update'
+            email: val,
+            key: search,
+            category: this.search_catergory
           }
         })
         .then(result => {
-         // console.log(result.data.length);
-          for(let i=0; i<result.data.length; i++){
-            console.log(document.getElementsByClassName('user_first_name')[i].getAttribute('data'));
-            console.log(result.data[i].user_first_name);
-            if(document.getElementsByClassName('user_first_name')[i].getAttribute('data') !== result.data[i].first_name ){
-              this.esAlert('true', 'success', 'Data was successfully changed.');
-              this.getUsers();
-            }
-          }
-        }).catch(error => {          
-          this.esAlert('false', 'error', 'The Email has already been used.');
-          console.error(error)
-        });
-
-     //   console.log(arrCheckboxes);
-      },
-      deleteUsers: function() {
-        let checkboxes = document.getElementsByClassName('checkboxes');
-        let arrCheckboxes = [];
-       
-        for(let i = 0; i < checkboxes.length; i++) {
-          if(checkboxes[i].classList.contains("v-input--is-label-active")) {
-            arrCheckboxes.push(checkboxes[i].getAttribute('data'));            
-          }         
-        }
-
-        axios({ 
-          method: "DELETE",
-          url: (this.url + "/admin/destroy"),
-          data: {
-            id: arrCheckboxes,
-            action: 'delete'
-          }
-        })
-        .then(result => {
-          this.esAlert('true', 'success', 'Data was successfully removed.');
-          this.getUsers();
+          this.obj_tasks = result.data;
+          this.datas.sheet = this.obj_tasks;
+        if(this.obj_tasks.length < 1){
+            this.esAlert('false', 'error', 'Your search for ' + this.search + ' by category ' + this.search_catergory  + ' found no results.');
+          }else{
+            this.es_alert=false;
+          }              
         }).catch(error => {
-          this.esAlert('false', 'error', 'Unknown error');
-          console.error(error)
+            console.error(error);
         });
       },
-
-      closeDialog () {
-        this.dialog = false
-        setTimeout(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-          }, 300)
-      },
-
-
-
-
-
       onExport: function() {
         var sheetWS = XLSX.utils.json_to_sheet(this.datas.sheet) 
         var wb = XLSX.utils.book_new() // make Workbook of Excel
-
         XLSX.utils.book_append_sheet(wb, sheetWS, 'sheet') // sheetAName is name of Worksheet
         XLSX.writeFile(wb, this.employee + '.xlsx') // name of the file is 'book.xlsx'
       },
@@ -485,6 +331,4 @@
 .v-datatable > thead > tr > th.column{ 
   color:white;
 }
-
-
 </style>
