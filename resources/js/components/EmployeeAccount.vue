@@ -99,32 +99,34 @@
 
 
 
-   <v-form ref="form">
+          <v-form ref="form">
           <v-text-field
             v-if="info.change_pwd==true"
             v-model="new_pwd"
             :append-icon="showPwd2 ? 'visibility_off' : 'visibility'"
-           :rules="confirmPassword"
+                        :rules="[rules.required,rules.min,rules.max]"
+
             :type="showPwd2 ? 'text' : 'password'"
             name="input-10-1"
             label="New password"           
             counter
             @click:append="showPwd2 = !showPwd2;"
           ></v-text-field> 
-           </v-form>
+           
        
           <v-text-field
             v-if="info.change_pwd==true"
-            v-model="confirm_new_pwd"
+            v-model="info.confirm_new_pwd"
             :append-icon="showPwd3 ? 'visibility_off' : 'visibility'"
-            :rules="[rules.required]"
+                       :rules="confirmPassword"
+
             :type="showPwd3 ? 'text' : 'password'"
             name="input-10-1"
             label="Confirm New password"           
             counter
             @click:append="showPwd3 = !showPwd3;"
           ></v-text-field> 
-                   
+          </v-form>   
 
 
         <v-btn
@@ -176,10 +178,11 @@
               last_name:'',
               email:'', 
               current_pwd:'',
+              new_pwd : '',
+              confirm_new_pwd: '',
               change_pwd:false
             },
-      new_pwd : '',
-      confirm_new_pwd: '',
+     new_pwd : '',
       new_pwd_value: '',
 
       drawer: true,
@@ -205,9 +208,9 @@
 
       rules: {
         required: value => !!value || 'Required.',
-        min: value => value.length >= 3 || 'Min 3 characters',
+        min: value => value.length >= 3 || 'Minimum 3 characters',
         numeric: value => value > 0 || 'Enter the number',
-        //same: value => value ==  || 'the same',
+        max: value => value.length <=25 || 'Maximum 25 charachter allowed',
         emailMatch: [
           v => !!v || 'E-mail is required',
           v => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
@@ -220,34 +223,15 @@
     props: ['url'],
     mounted: function() {
       this.url = this._props.url;
-     
-    /*  this.username = this._props.username;
-      this.obj_tasks = JSON.parse(this.tasks);
-      console.log(this.obj_tasks);*/
     },
     created: function(){
       this.getAccount();
-    //  this.debouncedGetAnswer = _.debounce(this.getAnswer, 500);
     },
     watch: {
 
        new_pwd:'validateField',
        confirm_new_pwd:'validateField'
 
-    /*  new_pwd: function (newQuestion, oldQuestion) {
-        this.new_pwd_value = newQuestion;
-      //  this.debouncedGetAnswer()
-        console.log(this.new_pwd_value);
-      },
-      confirm_new_pwd: function (newQuestion, oldQuestion) {
-        
-      //  this.debouncedGetAnswer()
-      if(this.new_pwd_value == newQuestion){
-console.log('sasas');
-console.log(this.rules.same(false));
-      }
-        
-      }*/
     },
     methods: {
       validateField () {
@@ -259,6 +243,7 @@ console.log(this.rules.same(false));
         this.es_alert_text = text;        
       },
       getAccount: function(){
+
         axios({ 
           method: "POST",
           url: (this.url + "/employee/account/show")
@@ -268,6 +253,8 @@ console.log(this.rules.same(false));
             first_name: result.data.first_name,
             last_name: result.data.last_name,
             email: result.data.email,
+            new_pwd : result.data.new_pwd,
+            confirm_new_pwd : result.data.confirm_new_pwd,
             change_pwd: false,
             current_pwd:''
           }        
@@ -277,6 +264,15 @@ console.log(this.rules.same(false));
         });
       },
       changeAccount: function(){
+      
+        console.log(this.info);
+        if(this.info.change_pwd == true && this.info.confirm_new_pwd != this.new_pwd){
+          this.esAlert('false', 'error', 'Confirmation password does not match error');
+        }else if((this.info.change_pwd == true) && (this.info.confirm_new_pwd.length < 3 || this.info.confirm_new_pwd.length > 25)){
+          this.esAlert('false', 'error', 'Your password can not beless than 3 or longer than 25 characters.');
+        }else{
+
+          this.info.new_pwd=this.new_pwd;
         axios({ 
           method: "POST",
           url: (this.url + "/employee/account/update"),
@@ -292,23 +288,20 @@ console.log(this.rules.same(false));
             case 203:
               this.esAlert('false', 'error', 'The password is incorrect please try again.');
               break;
+            case 213:
+              this.esAlert('false', 'error', 'Confirmation password does not match error!');
+              break;  
             default:
               console.log(result);
               break;  
-          }          
+          }    
+              
         }).catch(error => {
             this.esAlert('false', 'error', 'Please fill in password field.');
             console.error(error);
         });
+        }
       },
-
-      
-
-
-
-
-
-
 
 
       sidebar: function(val) {
@@ -358,14 +351,15 @@ console.log(this.rules.same(false));
      confirmPassword () {
       const confirmPassword = []
 
-       if (this.confirm_new_pwd) {
+       if (this.new_pwd) {
          const rule =
-           v => (!!v && v) === this.confirm_new_pwd ||
+           v => (!!v && v) === this.new_pwd ||
              'Values do not match'
-
          confirmPassword.push(rule)
        }
+       
 
+      
       return confirmPassword
      }
    }
