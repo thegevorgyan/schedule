@@ -72,7 +72,7 @@
           id="tsk_name"
           color="green darken-1"
           label="Tasks Name"
-          :items= "types" 
+          :items= "task_types" 
           item-text="name"
           item-value="val"
           :rules="[rules.required]"
@@ -209,7 +209,7 @@
       es_alert_type: 'success',  
       es_alert_text: 'Data was successfully changed.', 
      
-      types: [  
+      task_types: [  
                 {'name':'Task1','val':'Task1'}, 
                 {'name':'Task2','val':'Task2'},
                 {'name':'Task3','val':'Task3'},

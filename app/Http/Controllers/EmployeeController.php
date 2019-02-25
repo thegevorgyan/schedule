@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-//use Illuminate\Support\Facades\URL;
 
 class EmployeeController extends Controller
 {
@@ -46,14 +45,10 @@ class EmployeeController extends Controller
 
     public function store(Request $request)
     {
-
-      //  return json_encode($request->all());
-      //  return json_encode($request->input('tsk_name'));
        DB::table('tasks')->insert([
             'user_login' => Auth::user()->email,
-            'user_first_name' => '1',
-            'user_last_name' => '2',
             'task_name' => $request->input('tsk_name'),
+            'comments' => $request->input('tsk_name'),
             'hours' => $request->input('hour'),
             'minutes' => $request->input('minute'),
             'day' => $request->input('date')            
@@ -62,13 +57,10 @@ class EmployeeController extends Controller
 
     public function update(Request $request, $id)
     {   
-
-      //  return $request->input('date');
         DB::table('tasks')->where('id', '=', $id)->update([
             'user_login' => Auth::user()->email,
-            'user_first_name' => '1',
-            'user_last_name' => '2',
             'task_name' => $request->input('tsk_name'),
+            'comments' => $request->input('tsk_name'),
             'hours' => $request->input('hour'),
             'minutes' => $request->input('minute'),
             'day' => $request->input('date')
@@ -90,14 +82,14 @@ class EmployeeController extends Controller
     public function edit($id)
     {
         $tasks_row = DB::table('tasks')
-        ->where(['id'=> $id, 'user_login' => Auth::user()->email])       
+        ->where(['id'=> $id, 'user_login' => Auth::user()->email])
         ->get();
 
         if(count($tasks_row) == 1){
             return view('employee_task_edit', [ 'tasksRow' => $tasks_row ]);
         } else{
             abort(403);
-        }       
+        }
     }
 
 }
