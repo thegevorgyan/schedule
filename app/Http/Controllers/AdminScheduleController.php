@@ -41,13 +41,13 @@ class AdminScheduleController extends Controller
     {
         if($request->input('key')==false){
             $tasks = DB::table('tasks')
-            ->select('task_name','hours','minutes','day')
+            ->select('task_name','comments', 'hours','minutes','day')
             ->where('user_login', '=', $request->input('email'))
             ->get();
             return json_encode($tasks);
         } else if($request->input('key')!=false){
             $tasks = DB::table('tasks')
-            ->select('task_name','hours','minutes','day')
+            ->select('task_name','comments', 'hours','minutes','day')
             ->where('user_login', '=', $request->input('email'))
             ->where($request->input('category'),'LIKE',"%{$request->input('key')}%")
             ->get();

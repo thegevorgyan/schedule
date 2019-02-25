@@ -110,6 +110,7 @@
           >           
             <template slot="items" slot-scope="props">
               <td>{{ props.item.task_name }}</td>
+              <td>{{ props.item.comments }}</td>
               <td>{{ props.item.hours }}</td>
               <td>{{ props.item.minutes }}</td>
               <td>{{ props.item.day }}</td>
@@ -140,6 +141,7 @@
         required: value => !!value || 'Required.',
         min: value => value.length >= 3 || 'Min 3 characters',
         numeric: value => value > 0 || 'Enter the number',
+        select: value => value >= 0 || 'Select from the list',
         emailMatch: [
           v => !!v || 'E-mail is required',
           v => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
@@ -154,6 +156,7 @@
       es_alert_text: 'Data was successfully changed.',
       headers: [
         { text: 'Task Name', value: 'task_name' },
+        { text: 'Comments', value: 'comments' },
         { text: 'Hour(s)', value: 'hours' },
         { text: 'Minute(s)', value: 'minutes' },
         { text: 'Date', value: 'day' },
@@ -298,8 +301,6 @@
 </script>
 
 <style>
-
-
 [v-cloak] {
   display: none;
 }
