@@ -33,6 +33,7 @@
       <template slot="items" slot-scope="props">
         <tr>
           <td>{{ props.item.task_name }}</td>
+          <td>{{ props.item.comments }}</td>
           <td>{{ props.item.hours }}</td>
           <td>{{ props.item.minutes }}</td>
           <td>{{ props.item.day }}</td>        
@@ -46,52 +47,10 @@
               <v-icon>delete_forever</v-icon>
             </v-btn>
           </td>
-          <!-- <td>
-            <v-btn color="info" fab small title="Get Code" @click="getcodeWebsite(props.item.key)">
-              <v-icon>code</v-icon>
-            </v-btn>
-          </td> -->
         </tr>
       </template> 
-    </v-data-table>
-    <v-dialog
-      v-model="dialog_getcode"
-      width="580"
-    >  
-      <v-card>
-        <v-card-title
-          class="headline blue-grey lighten-4"
-        >
-          Get Code
-        </v-card-title>
-        <v-card-text>
-            Please copy and place this code on every page of your webite right after opening the &#60;body&#62; tag.
-        <br>    
-            To do so, you would usually place this code in header.html or header.php file.
-        </v-card-text>
-        <v-textarea         
-          outline
-          :value="key"            
-          max-height="120" 
-          no-resize     
-          style="color:#435b71"               
-        ></v-textarea>
-        <v-divider></v-divider>  
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn           
-            color="primary"
-            flat
-            @click="dialog_getcode = false"
-          >
-           <v-icon>cancel</v-icon>
-            Close
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    </v-data-table>  
     <v-dialog v-model="dialog_delete" persistent max-width="290">
-
       <v-card>
         <v-card-title        
           class="headline blue-grey lighten-4"
@@ -119,7 +78,6 @@
   export default {   
     data: () => ({
       dialog_delete: false,
-      dialog_getcode: false,
       pagination: {
         sortBy: 'name'
       },
@@ -128,6 +86,7 @@
       key: '',
       headers: [
         { text: 'Task Name', align: 'left', value: 'task_name' },
+        { text: 'Comments', value: 'comments' },
         { text: 'Hours', value: 'hours' },
         { text: 'Minutes', value: 'minutes' },
         { text: 'Day', value: 'day' },
@@ -168,11 +127,6 @@
         }, error => {
           console.error(error);
         }); 
-      },
-      getcodeWebsite: function(key){
-        this.dialog_getcode = true;
-        this.key = '<script src="' + this.url + '/cache/' + key +  '.js" type="text/javascript"><\/script>';
-     //   this.key = '<script src="https://dev.aspirevapeco.com/cache/' + key +  '.js" type="text/javascript"><\/script>';
       },
       toggleAll () {
       if (this.selected.length) this.selected = []

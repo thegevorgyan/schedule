@@ -13,7 +13,6 @@ Route::get('employee', 'EmployeeController@index')->name('employee');
 Route::get('employee/tasks/store', function(){ abort('404'); });
 Route::post('employee/tasks/store', 'EmployeeController@store');
 
-
 Route::get('employee/tasks/destroy', function(){ abort('404'); });
 Route::post('employee/tasks/destroy', 'EmployeeController@destroy');
 Route::get('employee/tasks/update/{id}', function(){ abort('404'); });
@@ -39,11 +38,7 @@ Route::prefix('admin')->group(function(){
     Route::post('/schedule/getsch', 'AdminScheduleController@get_schedule');
 
     Route::post('/getus', 'AdminController@get_users');
-  //  Route::get('/stor', 'AdminController@stor')->name('admin.stor');
-  //  Route::get('/cache', 'AdminController@cache')->name('admin.cache');
-    
-    Route::delete('/destroy', 'AdminController@destroy')->name('admin/destroy');
-    
+    Route::delete('/destroy', 'AdminController@destroy')->name('admin/destroy');    
     
     Route::get('/users/update', function(){ abort('404'); });
     Route::post('/users/update', 'AdminController@update')->name('admin/update');
@@ -52,24 +47,3 @@ Route::prefix('admin')->group(function(){
 });
 
 Route::get('/users/logout', 'Auth\LoginController@userLogout')->name('user.logout');
-
-Route::get('/websites', 'WebsitesController@index')->name('websites');
-
-Route::get('/compare', 'CheckController@compare')->middleware('cors');
-
-Route::get('/check', 'CheckController@check')->middleware('cors');
-
-//Route::post('/storage', 'CheckController@store');
-
-
-Route::get('/storage', 'CheckController@store')->middleware('cors');
-
-
-//Route::post('store', 'WebsitesController@store');
-
-
-
-
-
-
-//Route::match(['get', 'post'], '/destroy', 'WebsitesController@destroy');

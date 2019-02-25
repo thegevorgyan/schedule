@@ -45,10 +45,12 @@ class EmployeeController extends Controller
 
     public function store(Request $request)
     {
-       DB::table('tasks')->insert([
+        $request->input('comments') == '' ? $comments = '' : $comments = $request->input('comments');
+
+        DB::table('tasks')->insert([
             'user_login' => Auth::user()->email,
             'task_name' => $request->input('tsk_name'),
-            'comments' => $request->input('tsk_name'),
+            'comments' => $comments,
             'hours' => $request->input('hour'),
             'minutes' => $request->input('minute'),
             'day' => $request->input('date')            
@@ -56,11 +58,13 @@ class EmployeeController extends Controller
     }
 
     public function update(Request $request, $id)
-    {   
+    {  
+        $request->input('comments') == '' ? $comments = '' : $comments = $request->input('comments');
+
         DB::table('tasks')->where('id', '=', $id)->update([
             'user_login' => Auth::user()->email,
             'task_name' => $request->input('tsk_name'),
-            'comments' => $request->input('tsk_name'),
+            'comments' => $comments,
             'hours' => $request->input('hour'),
             'minutes' => $request->input('minute'),
             'day' => $request->input('date')
