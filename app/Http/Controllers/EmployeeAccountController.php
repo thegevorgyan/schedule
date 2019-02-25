@@ -50,25 +50,38 @@ class EmployeeAccountController extends Controller
         $message['status'] = '201';
 
         foreach ($request->input('info') as $value) {             
-            if($value['change_pwd'] == false){
-
+           
                 $info = DB::table('users')
                 ->select('password')
                 ->where('email', $username)
                 ->first();
 
+                
+
                 if(Hash::check($value['current_pwd'], $info->password)){
-                    $data = DB::table('users')
+                    if($value['change_pwd'] == false){
+                    $changePwd = [
+                        'first_name' => $value['first_name'],
+                        'last_name' => $value['last_name']                                
+                    ];
+                }else if($value['change_pwd'] == true){
+                    if($value['confirm_new_pwd']!=$value['new_pwd']){
+                        return $message['status'] = '213';
+                    }
+                    $changePwd = [
+                        'first_name' => $value['first_name'],
+                        'last_name' => $value['last_name'],
+                        'password' => Hash::make($value['new_pwd'])                                 
+                    ];
+                }
+
+                $data = DB::table('users')
                         ->where(['email' => $username])
-                        ->update([
-                            'first_name' => $value['first_name'],
-                            'last_name' => $value['last_name']                                
-                        ]);
+                        ->update($changePwd);
                     return $message['status'] = '200';    
                 }else {
                     return $message['status'] = '203';
                 }
-            }
         }     
         return $message['status'] = '201';   
     }
