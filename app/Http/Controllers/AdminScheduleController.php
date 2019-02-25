@@ -17,7 +17,7 @@ class AdminScheduleController extends Controller
 
     public function index()
     {
-       // return view('admin.admin');
+       //
     }
 
     public function show()
@@ -33,21 +33,28 @@ class AdminScheduleController extends Controller
             ->get();
             return json_encode($users);  
         } else {
-            return 'You do not have a privilege';
+            return 'You do not have a privilege for users';
         }     
     }
 
     public function get_schedule(Request $request)
-    {        
-        if($request->input('email')){
-            $tasks = DB::table('tasks')           
+    {
+        if($request->input('key')==false){
+            $tasks = DB::table('tasks')
             ->select('task_name','hours','minutes','day')
             ->where('user_login', '=', $request->input('email'))
             ->get();
-            return json_encode($tasks);  
+            return json_encode($tasks);
+        } else if($request->input('key')!=false){
+            $tasks = DB::table('tasks')
+            ->select('task_name','hours','minutes','day')
+            ->where('user_login', '=', $request->input('email'))
+            ->where($request->input('category'),'LIKE',"%{$request->input('key')}%")
+            ->get();
+            return json_encode($tasks);
         } else {
-            return 'You do not have a privilege';
-        }     
+            return 'You do not have a privilege for schedules';
+        }
     }
 
     public function store(Request $request)
@@ -65,8 +72,7 @@ class AdminScheduleController extends Controller
 
     public function update(Request $request)
     {
-    
-        if($request->input('action') == 'update'){                    
+        if($request->input('action') == 'update'){
             foreach ($request->input('id') as $key => $value) {
                 DB::table('users')
                 ->where('id', '=', $value['id'])
@@ -76,11 +82,9 @@ class AdminScheduleController extends Controller
                     'email' => $value['user_email'],
                     'password' => $value['user_password']
                 ]);
-                
-            }   
-            return $request->input('id');        
-        } 
-     
+            }
+            return $request->input('id');
+        }      
     }
 
     public function destroy(Request $request)
